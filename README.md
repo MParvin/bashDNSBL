@@ -10,10 +10,16 @@ Insert your servers IP addresses to ip.list file.
 And You can add/remove DNSBL servers in dnsbl.list file.
 
 Todo:
+
+0) Insert comment
+
 1) Integration with Telegram bot
+
 2) Use MySQL instead files
+
 3) Add all mail command options
-3) Create configuration file for store mysql and smtp credentials
+
+4) Create configuration file for store mysql and smtp credentials
 
 
 If you have any Ideas, Please contact me with this ways:
