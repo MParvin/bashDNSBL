@@ -22,5 +22,5 @@ fi
 done
 done
 if [ "$BLOK" == "1" ];then
-echo "Our IP Listed !!!!!!!!!!!!!!" | mail -s "BERTINA ATTENTION" -a report.txt m.parvin986@gmail.com
+echo "Our IP Listed !!!!!!!!!!!!!!" | mail -s "ATTENTION" -a report.txt "YOUR EMAIL ADDRESS"
 fi
