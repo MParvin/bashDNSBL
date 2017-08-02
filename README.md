@@ -1,7 +1,7 @@
 # bashDNSBL
 Simple query DNS-based blackhole lists
 
-This script send an email with report.txt as attached file to you when an IP is listed in a DNSBL. 
+This script send an email with report.txt as attached file to you when an IP is listed in a DNSBL.
 
 ****** Change Email address in line 25 of check.sh ******
 
@@ -23,7 +23,8 @@ Todo:
 
 
 If you have any Ideas, Please contact me with this ways:
-** Email : m.parvin986@gmail.com **
+
+**Email: m.parvin986@gmail.com **
 
 **Telegram: https://telegram.me/mmparvin **
 
