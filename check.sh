@@ -1,26 +1,48 @@
-#!/bin/sh
-BLOK=`echo 0`
+#!/bin/bash
+. ./dnsbl.config
+
 >report.txt
-for IPADD in `cat ip.list`
+for ipAddress in "${ipAddresses[@]}"
 do
 echo "Reversing"
-echo $IPADD
-IPADD1=$(echo $IPADD | cut -d"." -f1)
-IPADD2=$(echo $IPADD | cut -d"." -f2)
-IPADD3=$(echo $IPADD | cut -d"." -f3)
-IPADD4=$(echo $IPADD | cut -d"." -f4)
-REV="${IPADD4}.${IPADD3}.${IPADD2}.${IPADD1}"
-echo $REV
-for DNSBLS in `cat dnsbl.list`
+##### Reversing IP address, for example IP 192.168.1.1 reverse is 1.1.168.192
+IPADD1=$(echo $ipAddress | cut -d"." -f1)
+IPADD2=$(echo $ipAddress | cut -d"." -f2)
+IPADD3=$(echo $ipAddress | cut -d"." -f3)
+IPADD4=$(echo $ipAddress | cut -d"." -f4)
+reversedIP="${IPADD4}.${IPADD3}.${IPADD2}.${IPADD1}"
+echo "IP $ipAddress reversed to  $reversedIP"
+##### Is IP Blocked - When an IP is blocked this variable value will change to YES
+IS_BLOCKED="NO"
+##### Loop in DNSBL servers
+for DNSBLS in "${dnsblList[@]}"
 do
-dig $REV.$DNSBLS | grep "127.0.0"
+##### When dig reverseIP.DNSBL-Server if output contains 127.0.0.1 that IP is blocked in that DNSBL
+dig $reversedIP.$DNSBLS | grep "127.0.0"
+##### If $? is not equal to 0, this IP not in black list
 if [ "$?" != "0" ];then
-echo "$IPADD is not listed on $DNSBLS"
+echo "$ipAddress is not listed on $DNSBLS"
+##### If $? is equal to other numbers IP is in black list
 else
-echo "$IPADD is listed on $DNSBLS" >> report.txt && BLOK=`echo 1`
+echo "$ipAddress is listed on $DNSBLS" >> "$logFolder/$logFiles" && IS_BLOCKED=`YES`
 fi
+done # end of dnsbls loop
+if [ "$IS_BLOCKED" == "YES" ]
+then
+if [ "$emailEnable" == "YES"]
+then
+for emailAddress in "${emailTo[@]}"
+do
+  echo "Our IP Listed !!!!!!!!!!!!!!" | mail -s "ATTENTION" -a report.txt "YOUR EMAIL ADDRESS"
+done # end of email address loops
+fi # end of email enable if
+if ["$telegramEnable" == "YES"]
+then
+messageToSend="Your mail server with IP $ipAddress is blocked"
+for chatId in "${chatIDs}"
+do
+curl -X POST "https://api.telegram.org/bot$telegramToken/sendMessage" -d "chat_id=$chatId&text=$messageToSend"
 done
-done
-if [ "$BLOK" == "1" ];then
-echo "Our IP Listed !!!!!!!!!!!!!!" | mail -s "ATTENTION" -a report.txt "YOUR EMAIL ADDRESS"
-fi
+fi # end of telegram enable if section
+fi # end of is block if section
+done # end of ip address loop
