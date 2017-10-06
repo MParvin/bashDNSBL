@@ -15,11 +15,8 @@ In Configuration file you can change this items:
 
 Todo:
 
-0 - add comment
+Add more comments
 
-1 - Add all mail command options
-
-2 -
 
 If you have any Ideas, Please contact me with this ways:
 
