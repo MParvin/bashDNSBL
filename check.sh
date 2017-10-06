@@ -17,27 +17,34 @@ for DNSBLS in "${dnsblList[@]}"
 do
 ##### When dig reverseIP.DNSBL-Server if output contains 127.0.0.1 that IP is blocked in that DNSBL
 dig $reversedIP.$DNSBLS | grep "127.0.0"
-##### If $? is not equal to 0, this IP not in black list
+continue
+##### If $? is not equal to 0, this IP not in black list (Is black listed)
 if [ "$?" != "0" ];then
 echo "$ipAddress is not listed on $DNSBLS"
 ##### If $? is equal to other numbers IP is in black list
 else
+##### Logging server blocked
 echo "$ipAddress is listed on $DNSBLS" >> "$logFolder/$logFiles"
-fi
-done # end of dnsbls loop
+##### Check is email notification enable, If enabled send email
+messageToSend="Your mail server with IP $ipAddress is blocked in $DNSBLS"
+
 if [ "$emailEnable" == "YES"]
 then
 for emailAddress in "${emailTo[@]}"
 do
-  echo "Our IP Listed !!!!!!!!!!!!!!" | mail -s "ATTENTION" -a report.txt "YOUR EMAIL ADDRESS"
+echo $messageToSend | mail -s "DNSBL Alert" $emailAddress
 done # end of email address loops
 fi # end of email enable if
+##### Check is Telegram notification enable, If enabled send message to telegram
 if ["$telegramEnable" == "YES"]
 then
-messageToSend="Your mail server with IP $ipAddress is blocked"
 for chatId in "${chatIDs}"
 do
 curl -X POST "https://api.telegram.org/bot$telegramToken/sendMessage" -d "chat_id=$chatId&text=$messageToSend"
 done
 fi # end of telegram enable if section
+
+fi # end of is blacklisted if
+done # end of dnsbls loop
+
 done # end of ip address loop
