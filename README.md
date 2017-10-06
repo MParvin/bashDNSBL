@@ -5,6 +5,7 @@ This bash script send you a message in telegram or send an email to your email l
 One of your mail servers IP address is in dnsbl black lists.
 
 ****** Configuration file ******
+
 In Configuration file you can change this items:
 1 - Log file location and name
 2 - Mail servers IP address
