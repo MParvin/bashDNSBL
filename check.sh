@@ -32,7 +32,8 @@ if [ "$emailEnable" == "YES"]
 then
 for emailAddress in "${emailTo[@]}"
 do
-echo $messageToSend | mail -s "DNSBL Alert" $emailAddress
+
+echo $messageToSend | mail -v -s "DNSBL Alert" $emailAddress -aFrom:$emailFrom -S smtp=$SMTPServerIP -S smtp-use-starttls -S smtp-auth=login -S smtp-auth-user=$mailUserName -S smtp-auth-password=$mailPassword -S ssl-verify=ignore
 done # end of email address loops
 fi # end of email enable if
 ##### Check is Telegram notification enable, If enabled send message to telegram
