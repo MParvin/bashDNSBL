@@ -12,8 +12,6 @@ IPADD3=$(echo $ipAddress | cut -d"." -f3)
 IPADD4=$(echo $ipAddress | cut -d"." -f4)
 reversedIP="${IPADD4}.${IPADD3}.${IPADD2}.${IPADD1}"
 echo "IP $ipAddress reversed to  $reversedIP"
-##### Is IP Blocked - When an IP is blocked this variable value will change to YES
-IS_BLOCKED="NO"
 ##### Loop in DNSBL servers
 for DNSBLS in "${dnsblList[@]}"
 do
@@ -24,11 +22,9 @@ if [ "$?" != "0" ];then
 echo "$ipAddress is not listed on $DNSBLS"
 ##### If $? is equal to other numbers IP is in black list
 else
-echo "$ipAddress is listed on $DNSBLS" >> "$logFolder/$logFiles" && IS_BLOCKED=`YES`
+echo "$ipAddress is listed on $DNSBLS" >> "$logFolder/$logFiles"
 fi
 done # end of dnsbls loop
-if [ "$IS_BLOCKED" == "YES" ]
-then
 if [ "$emailEnable" == "YES"]
 then
 for emailAddress in "${emailTo[@]}"
@@ -44,5 +40,4 @@ do
 curl -X POST "https://api.telegram.org/bot$telegramToken/sendMessage" -d "chat_id=$chatId&text=$messageToSend"
 done
 fi # end of telegram enable if section
-fi # end of is block if section
 done # end of ip address loop
