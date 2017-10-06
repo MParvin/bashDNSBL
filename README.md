@@ -1,26 +1,24 @@
 # bashDNSBL
 Simple query DNS-based blackhole lists
 
-This script send an email with report.txt as attached file to you when an IP is listed in a DNSBL.
+This bash script send you a message in telegram or send an email to your email list When
+One of your mail servers IP address is in dnsbl black lists.
 
-****** Change Email address in line 25 of check.sh ******
-
-Insert your servers IP addresses to ip.list file.
-
-And You can add/remove DNSBL servers in dnsbl.list file.
+****** Configuration file ******
+In Configuration file you can change this items:
+1 - Log file location and name
+2 - Mail servers IP address
+3 - Email configuration
+4 - Telegram configuration
+5 - DNSBL servers lists
 
 Todo:
 
-0) Insert comment
+0 - add comment
 
-1) Integration with Telegram bot
+1 - Add all mail command options
 
-2) Use MySQL instead files
-
-3) Add all mail command options
-
-4) Create configuration file for store mysql and smtp credentials
-
+2 -
 
 If you have any Ideas, Please contact me with this ways:
 
