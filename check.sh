@@ -1,6 +1,9 @@
 #!/bin/bash
 . ./dnsbl.config
 
+##### Create log folder if it does not exsits
+[ -d $logFolder ] || mkdir $logFolder
+
 >report.txt
 for ipAddress in "${ipAddresses[@]}"
 do
